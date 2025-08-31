@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Exo+2:wght@800;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="موقع Matrix Consult الجديد بتصميم ديناميكي ومبهر مع مستشار ذكي ولوحة مؤشرات احترافية.">
+    <title>Matrix Consult | شريكك الاستراتيجي للامتثال المؤسسي</title>
+    <!-- Custom CSS for animations and styling -->
+    <style>
+        :root {
+            --primary-color: #1E6091; /* أزرق مهني */
+            --primary-dark: #0D2C4F;  /* كحلي عميق احترافي */
+            --accent-color: #7EBDC2; /* فيروزي هادئ للمسات الجمالية */
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-600: #475569;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --success-color: #22c55e;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', 'Inter', sans-serif;
+            background-color: var(--slate-50);
+            color: var(--slate-800);
+            overflow-x: hidden;
+        }
+        
+        .font-mono { font-family: 'Roboto Mono', monospace; }
+
+        .subtle-bg {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3d3dtbW17e3t1dXVpaWl9fX1cXFxycnKvr6vPz8+6urqsrKzT09O8vLyoqKjW1tbv7+/MzMyxtLTw8PDx8fH4+Pj29vb+/v7r6+s/Nx2fAAAAQElEQVR42q3NQQAEAAAQoWul/xUAUtgnaAfw31g4B4sNaMvgy7G0cQLG8wLG8wLG8wLG8wLG8wLG8wLG8wLG8wLG8wLG8wLG88HjAwq9A82oAN8aAAAAAElFTSuQmCC');
+        }
+
+        .container {
+            max-width: 85rem;
+            margin: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+        }
+        .logo-text {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(45deg, var(--primary-dark), var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .hero-bg-gradient {
+            background: linear-gradient(-45deg, var(--primary-dark), var(--primary-color), var(--accent-color), var(--primary-color));
+            background-size: 400% 400%;
+            animation: gradient-flow 15s ease infinite;
+        }
+        
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        #main-nav a {
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+        #main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-dark);
+            transition: width 0.3s ease-out;
+        }
+        #main-nav a:hover::after {
+            width: 100%;
+        }
+
+        .cta-btn {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            font-weight: 800;
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        .cta-btn:active {
+            transform: translateY(0px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .service-card .service-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .service-card:hover .service-icon {
+            transform: translateY(-10px);
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition-delay: var(--delay);
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        @keyframes slideInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .hero-title, .hero-subtitle, .hero-btn {
+            animation: slideInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation-delay: var(--delay, 0s);
+            opacity: 0;
+        }
+
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background-color: var(--primary-dark);
+            color: white;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            z-index: 100;
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #partners {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230D2C4F' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+        
+        .partner-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .partner-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .milestone-box {
+            background-color: #e9f1f7;
+            color: var(--primary-dark);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            border-right: 4px solid var(--primary-color);
+            text-align: right;
+        }
+        .milestone-box .milestone-title {
+            font-weight: 800;
+            font-size: 0.875rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.25rem;
+        }
+        .milestone-box p {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        .milestone-star {
+            display: inline-block;
+            margin-left: 0.5rem;
+            color: #f59e0b;
+        }
+        
+        .partner-contact a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            color: #4b5563;
+            transition: color 0.2s;
+            font-size: 0.875rem;
+        }
+        .partner-contact a:hover {
+            color: var(--primary-color);
+        }
+
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(229, 231, 235, 0.7);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.3s ease-out;
+        }
+        .modal-overlay:not(.hidden) .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .featured-tag {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255,255,255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255, 0); }
+        }
+
+        @keyframes focus-glow {
+            from { box-shadow: 0 0 0 0 rgba(30, 96, 145, 0.3); }
+            to { box-shadow: 0 0 0 6px rgba(30, 96, 145, 0); }
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(30, 96, 145, 0.3);
+            animation: focus-glow 1.5s infinite;
+        }
+        
+        .faq-item .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .faq-item .faq-toggle-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .faq-item.open .faq-toggle-icon {
+            transform: rotate(45deg);
+        }
+
+        .shape-divider {
+            position: relative;
+            height: 100px;
+        }
+        .shape-divider svg {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+        }
+        
+        #cookie-banner {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 100;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        #cookie-banner.hidden {
+            transform: translateY(200%);
+            opacity: 0;
+        }
+
+        .methodology-step {
+            position: relative;
+            padding-right: 2.5rem;
+        }
+        .methodology-step:not(:last-child)::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            width: 2px;
+            height: calc(100% - 20px);
+            background: linear-gradient(to bottom, var(--primary-color), var(--accent-color));
+            opacity: 0.5;
+        }
+        .methodology-icon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            border: 4px solid var(--slate-100);
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* AI Advisor Styles */
+        #ai-chat-window.open {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #ai-chat-messages {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--slate-100);
+        }
+        #ai-chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        #ai-chat-messages::-webkit-scrollbar-track {
+            background: var(--slate-100);
+        }
+        #ai-chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 6px;
+        }
+        .user-message {
+            background-color: var(--primary-color) !important;
+            color: white;
+            border-radius: 0.5rem;
+            border-bottom-right-radius: 0;
+        }
+        .ai-typing-indicator span {
+            animation: blink 1.4s infinite both;
+        }
+        .ai-typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .ai-typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes blink {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Dashboard Portal & Loading Screen */
+        #dashboard-portal {
+            position: fixed; inset: 0; background-color: #0B1120;
+            z-index: 200; opacity: 0; visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            color: white; overflow-y: auto;
+        }
+        #dashboard-portal.active { opacity: 1; visibility: visible; }
+        #loading-screen {
+            position: absolute; inset: 0; background-color: #0B1120;
+            display: flex; align-items: center; justify-content: center; z-index: 10;
+            transition: opacity 0.5s ease-in-out 0.5s;
+        }
+        #loading-screen.hidden { opacity: 0; pointer-events: none; }
+        .spinner {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #dashboard-content { opacity: 0; transition: opacity 0.5s ease-in-out 1s; }
+        #dashboard-portal.loaded #dashboard-content { opacity: 1; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1.5rem; }
+        .widget {
+            background: rgba(30, 96, 145, 0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(30, 96, 145, 0.3);
+            border-radius: 1rem; padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .widget:hover { border-color: var(--accent-color); transform: translateY(-3px); }
+        .widget-title { display: flex; align-items: center; gap: 0.5rem; font-weight: bold; margin-bottom: 1rem; color: var(--accent-color); }
+        .kpi-widget { grid-column: span 12 / span 12; }
+        @media (min-width: 640px) { .kpi-widget { grid-column: span 6 / span 6; } }
+        @media (min-width: 768px) { .kpi-widget { grid-column: span 3 / span 3; } }
+        .main-chart-widget { grid-column: span 12 / span 12; }
+        @media (min-width: 768px) { .main-chart-widget { grid-column: span 8 / span 8; } }
+        .log-widget { grid-column: span 12 / span 12; }
+        @media (min-width: 768px) { .log-widget { grid-column: span 4 / span 4; } }
+        .heatmap-widget { grid-column: span 12 / span 12; }
+        
+        .tooltip {
+            position: absolute; bottom: 120%; right: 50%; transform: translateX(50%);
+            background-color: var(--slate-900); color: white; padding: 0.5rem 1rem;
+            border-radius: 0.5rem; font-size: 0.8rem; width: max-content;
+            opacity: 0; visibility: hidden; transition: opacity 0.3s ease; z-index: 10;
+        }
+        .info-icon:hover .tooltip, .heatmap-cell:hover .tooltip { opacity: 1; visibility: visible; }
+        
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+        .toggle-switch input { display: none; }
+        .slider {
+            position: absolute; cursor: pointer; inset: 0; background-color: #4A5568;
+            transition: .4s; border-radius: 28px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--success-color); }
+        input:checked + .slider:before { transform: translateX(22px); }
+        
+        .heatmap-container { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: center; }
+        .heatmap-y-axis { display: flex; flex-direction: column; justify-content: space-around; text-align: center; font-size: 0.8rem; color: var(--slate-300); }
+        .heatmap-x-axis { display: grid; grid-template-columns: repeat(5, 1fr); text-align: center; font-size: 0.8rem; color: var(--slate-300); }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+        .heatmap-cell { aspect-ratio: 1/1; border-radius: 0.25rem; transition: all 0.3s ease; cursor: pointer; position: relative; }
+        .heatmap-cell:hover { transform: scale(1.1); }
+        .risk-dot {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 1rem; height: 1rem; background-color: white; border-radius: 50%;
+            border: 2px solid var(--primary-dark);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+
+        #audit-log ul li { opacity: 0; transform: translateY(-10px); animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        .kpi-value.flash-update { animation: flash-green 0.8s ease-out; }
+        @keyframes flash-green { 50% { color: var(--success-color); text-shadow: 0 0 10px var(--success-color); } }
+        .kpi-value.flash-update-red { animation: flash-red 0.8s ease-out; }
+        @keyframes flash-red { 50% { color: var(--danger-color); text-shadow: 0 0 10px var(--danger-color); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<div id="main-content" class="transition-opacity duration-500">
+    <!-- شريط التنقل (Navbar) -->
+    <header id="navbar" class="fixed top-0 z-50 w-full transition-colors duration-300">
+        <div class="container mx-auto flex justify-between items-center py-4 md:py-6">
+            <a href="#home" class="logo-container">
+                <svg class="logo-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8L27 23V56L12 41V8Z" fill="#1E6091"/>
+                    <path d="M52 8L37 23V56L52 41V8Z" fill="#7EBDC2"/>
+                    <path d="M12 8L32 28L52 8L32 18L12 8Z" fill="#0D2C4F"/>
+                </svg>
+                <span class="logo-text text-2xl md:text-3xl font-black">Matrix Consult</span>
+            </a>
+            <button id="mobile-menu-btn" class="md:hidden text-[var(--primary-dark)] focus:outline-none p-2">
+                <svg id="hamburger-icon" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                <svg id="close-icon" class="h-8 w-8 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <nav id="main-nav" class="hidden md:flex flex-grow justify-end items-center">
+                <ul class="flex space-x-10 text-sm md:text-base font-semibold text-slate-800">
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#about">من نحن</a></li>
+                    <li><a href="#methodology">منهجيتنا</a></li>
+                    <li><a href="#command-center">مركز التحكم</a></li>
+                    <li><a href="#smart-advisor">المستشار الذكي</a></li>
+                    <li><a href="#services">خدماتنا</a></li>
+                    <li><a href="#packages">الباقات</a></li>
+                    <li><a href="#partners">الشركاء</a></li>
+                    <li><a href="#faq">الأسئلة الشائعة</a></li>
+                    <li><a href="#newsletter">النشرة الإخبارية</a></li>
+                    <li><a href="#contact">التواصل</a></li>
+                </ul>
+            </nav>
+        </div>
+        <nav id="mobile-menu" class="hidden md:hidden bg-white rounded-b-lg shadow-md py-2 px-4">
+            <ul class="flex flex-col space-y-2 text-base font-semibold">
+                 <li><a href="#home" class="block py-2 px-4 hover:bg-slate-100 rounded">الرئيسية</a></li>
+                <li><a href="#about" class="block py-2 px-4 hover:bg-slate-100 rounded">من نحن</a></li>
+                <li><a href="#methodology" class="block py-2 px-4 hover:bg-slate-100 rounded">منهجيتنا</a></li>
+                <li><a href="#command-center" class="block py-2 px-4 hover:bg-slate-100 rounded">مركز التحكم</a></li>
+                <li><a href="#smart-advisor" class="block py-2 px-4 hover:bg-slate-100 rounded">المستشار الذكي</a></li>
+                <li><a href="#services" class="block py-2 px-4 hover:bg-slate-100 rounded">خدماتنا</a></li>
+                <li><a href="#packages" class="block py-2 px-4 hover:bg-slate-100 rounded">الباقات</a></li>
+                <li><a href="#partners" class="block py-2 px-4 hover:bg-slate-100 rounded">الشركاء</a></li>
+                <li><a href="#faq" class="block py-2 px-4 hover:bg-slate-100 rounded">الأسئلة الشائعة</a></li>
+                <li><a href="#newsletter" class="block py-2 px-4 hover:bg-slate-100 rounded">النشرة الإخبارية</a></li>
+                <li><a href="#contact" class="block py-2 px-4 hover:bg-slate-100 rounded">التواصل</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- قسم الصفحة الرئيسية (Hero Section) -->
+    <section id="home" class="relative hero-bg-gradient text-white pt-32 pb-24 md:pt-48 md:pb-40 flex items-center justify-center overflow-hidden">
+        <div class="container mx-auto text-center px-4 z-10">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4 hero-title" style="--delay: 0.1s;">شريكك الاستراتيجي في عالم الامتثال المؤسسي</h1>
+            <p class="text-lg md:text-xl lg:text-2xl font-light mb-10 max-w-4xl mx-auto hero-subtitle" style="--delay: 0.3s;">نحوّل الامتثال من تحدٍ إلى فرصة، لتحقيق أهدافك بدقة وضمان استدامة أعمالك بثقة.</p>
+            <a href="#request_service" class="cta-btn inline-block bg-white text-[var(--primary-color)] py-4 px-12 rounded-full shadow-xl hero-btn" style="--delay: 0.5s;">
+                اطلب استشارة الآن
+            </a>
+        </div>
+        <div class="shape-divider absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-current text-slate-50"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- قسم شركاء النجاح (Trusted By Section) -->
+    <section id="trusted-by" class="py-12 bg-slate-100">
+        <div class="container mx-auto px-4">
+            <h3 class="text-center text-slate-500 font-bold text-lg mb-8">يثق بنا نخبة من رواد الأعمال والشركات</h3>
+            <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6">
+                <svg class="h-10 text-slate-400" viewBox="0 0 120 40" fill="currentColor"><text x="0" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold">رؤية</text></svg>
+                <svg class="h-10 text-slate-400" viewBox="0 0 120 40" fill="currentColor"><text x="0" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold">المستقبل</text></svg>
+                <svg class="h-10 text-slate-400" viewBox="0 0 120 40" fill="currentColor"><text x="0" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold">ابتكار</text></svg>
+                <svg class="h-10 text-slate-400" viewBox="0 0 120 40" fill="currentColor"><text x="0" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold">القمة</text></svg>
+                <svg class="h-10 text-slate-400" viewBox="0 0 120 40" fill="currentColor"><text x="0" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold">نمو</text></svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم عن الشركة (About Section) -->
+    <section id="about" class="subtle-bg py-24 md:py-40">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 animate-on-scroll">من نحن</h2>
+            <p class="text-lg text-slate-600 max-w-4xl mx-auto animate-on-scroll" style="--delay: 0.2s;">
+                في Matrix Consult، نؤمن بأن الامتثال ليس مجرد مجموعة من القواعد، بل هو أساس الثقة والنمو المستدام. نحن فريق من الخبراء القانونيين والتقنيين، متخصصون في تمكين الشركات من التنقل بثقة في المشهد التنظيمي المتغير، محولين الالتزامات المعقدة إلى ميزة تنافسية.
+            </p>
+        </div>
+    </section>
+
+    <!-- قسم لماذا تختارنا (Why Choose Us Section) -->
+    <section id="why-us" class="bg-slate-100 py-24 md:py-40">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center text-slate-900 mb-12 animate-on-scroll">لماذا تختار Matrix Consult؟</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                 <div class="bg-white p-8 rounded-xl shadow-lg text-center animate-on-scroll" style="--delay: 0.2s;">
+                    <div class="w-20 h-20 mx-auto mb-6 text-[var(--primary-dark)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-900">خبرة متكاملة</h3>
+                    <p class="text-slate-600">يجمع فريقنا بين الخبرة القانونية العميقة والفهم التقني المتطور، لنقدم لك رؤى استراتيجية وحلولاً عملية تتجاوز مجرد الامتثال.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center animate-on-scroll" style="--delay: 0.4s;">
+                    <div class="w-20 h-20 mx-auto mb-6 text-[var(--primary-dark)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-900">استراتيجيات مخصصة</h3>
+                    <p class="text-slate-600">ندرك أن كل عمل فريد من نوعه. لذلك، نصمم استراتيجيات امتثال مخصصة تتوافق مع أهدافك التجارية وحجم عملياتك، لضمان تحقيق أقصى فعالية.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg text-center animate-on-scroll" style="--delay: 0.6s;">
+                    <div class="w-20 h-20 mx-auto mb-6 text-[var(--primary-dark)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8a2.5 2.5 0 0 1 0 5 2.5 2.5 0 0 1 0-5Z"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="m17.66 6.34 1.41-1.41"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-900">شراكة مستدامة</h3>
+                    <p class="text-slate-600">علاقتنا معك هي شراكة طويلة الأمد. نقدم دعماً متواصلاً ومتابعة استباقية لنضمن أن عملك يظل متوافقاً مع أحدث التشريعات ومحمياً ضد المخاطر المستقبلية.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم منهجيتنا (Our Methodology) -->
+    <section id="methodology" class="py-24 md:py-40">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center text-slate-900 mb-16 animate-on-scroll">منهجيتنا في تحقيق الامتثال</h2>
+            <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-1 gap-12">
+                <div class="methodology-step animate-on-scroll" style="--delay: 0.2s;">
+                    <div class="methodology-icon"><span>1</span></div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-900">التحليل والتقييم</h3>
+                    <p class="text-slate-600">نبدأ بفهم عميق لعملك، وتقييم وضعك الحالي لتحديد الفجوات والمخاطر المتعلقة بالامتثال.</p>
+                </div>
+                <div class="methodology-step animate-on-scroll" style="--delay: 0.4s;">
+                    <div class="methodology-icon"><span>2</span></div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-900">تصميم الاستراتيجية</h3>
+                    <p class="text-slate-600">نصمم لك استراتيجية امتثال مخصصة وخارطة طريق واضحة تتوافق مع أهدافك وتضمن تغطية جميع المتطلبات التنظيمية.</p>
+                </div>
+                <div class="methodology-step animate-on-scroll" style="--delay: 0.6s;">
+                    <div class="methodology-icon"><span>3</span></div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-900">التنفيذ والمتابعة</h3>
+                    <p class="text-slate-600">نعمل معك جنباً إلى جنب لتطبيق الاستراتيجية، وتدريب فريقك، ووضع أنظمة المراقبة لضمان الالتزام المستمر.</p>
+                </div>
+                <div class="methodology-step animate-on-scroll" style="--delay: 0.8s;">
+                    <div class="methodology-icon"><span>4</span></div>
+                    <h3 class="text-2xl font-bold mb-3 text-slate-900">الدعم المستمر</h3>
+                    <p class="text-slate-600">نقدم دعماً متواصلاً وتقارير دورية، ونبقيك على اطلاع بآخر التحديثات التشريعية لنضمن استدامة الامتثال في عملك.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Command Center Gateway Section -->
+    <section id="command-center" class="py-24 md:py-40 bg-slate-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-6 animate-on-scroll">بوابة مركز التحكم</h2>
+            <p class="text-lg text-slate-300 max-w-3xl mx-auto mb-12 animate-on-scroll" style="--delay: 0.2s;">
+                استكشف القوة الكاملة لمنصتنا التحليلية. احصل على رؤى حية ودقيقة حول وضع الامتثال والمخاطر في منشأتك عبر واجهة تفاعلية مصممة للقادة.
+            </p>
+            <div class="max-w-4xl mx-auto bg-black/20 p-4 rounded-2xl border border-white/10 shadow-2xl animate-on-scroll" style="--delay: 0.4s;">
+                <img src="https://placehold.co/1200x600/0D2C4F/7EBDC2?text=Dashboard+Preview" alt="صورة توضيحية للوحة التحكم" class="rounded-lg mb-8 opacity-75">
+                <button id="launch-dashboard-btn" class="cta-btn bg-[var(--accent-color)] text-[var(--primary-dark)] font-extrabold py-4 px-12 rounded-full text-lg">
+                    الدخول إلى لوحة التحكم الحية
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المستشار الذكي -->
+    <section id="smart-advisor" class="py-24 md:py-40 bg-slate-100">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
+                <div class="animate-on-scroll text-center lg:text-right">
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">قابل مستشارك الذكي</h2>
+                    <p class="text-lg text-slate-600 max-w-lg mx-auto lg:mx-0 mb-8">
+                        احصل على إجابات فورية وموثوقة لأسئلتك المتعلقة بالامتثال. تم تدريب مستشارنا الذكي على أحدث اللوائح والتشريعات ليقدم لك إرشادات دقيقة على مدار الساعة.
+                    </p>
+                    <button id="showcase-launch-ai" class="cta-btn bg-[var(--primary-dark)] text-white font-extrabold py-4 px-12 rounded-full text-lg">
+                        جرب الآن
+                    </button>
+                </div>
+                <div class="animate-on-scroll" style="--delay: 0.2s;">
+                    <!-- Stylized Chatbot Preview -->
+                    <div class="max-w-md mx-auto bg-white rounded-2xl shadow-2xl flex flex-col h-[450px]">
+                         <div class="bg-[var(--primary-dark)] text-white p-4 rounded-t-2xl flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold">المستشار الذكي</h3>
+                                <p class="text-xs text-slate-300">متصل الآن</p>
+                            </div>
+                         </div>
+                         <div class="flex-grow p-4 space-y-4 overflow-hidden">
+                            <!-- AI Message -->
+                            <div class="flex items-start gap-2.5">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-5 h-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect x="4" y="12" width="8" height="8" rx="2"></rect><path d="M8 12v-2a2 2 0 1 1 4 0v2"></path><path d="M12 12h8"></path><path d="M16 12v-2a2 2 0 1 0-4 0v2"></path></svg>
+                                </div>
+                                <div class="bg-slate-100 p-3 rounded-lg rounded-tl-none">
+                                    <p class="text-sm">أهلاً بك! كيف يمكنني مساعدتك؟</p>
+                                </div>
+                            </div>
+                            <!-- User Message -->
+                            <div class="flex items-start gap-2.5 justify-end">
+                                <div class="bg-[var(--primary-color)] text-white p-3 rounded-lg rounded-br-none max-w-[80%]">
+                                    <p class="text-sm">ما هي أهم متطلبات نظام حماية البيانات الشخصية السعودي؟</p>
+                                </div>
+                            </div>
+                             <!-- AI Typing -->
+                            <div class="flex items-start gap-2.5">
+                                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                                     <svg class="w-5 h-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"></path><rect x="4" y="12" width="8" height="8" rx="2"></rect><path d="M8 12v-2a2 2 0 1 1 4 0v2"></path><path d="M12 12h8"></path><path d="M16 12v-2a2 2 0 1 0-4 0v2"></path></svg>
+                                </div>
+                                <div class="ai-typing-indicator bg-slate-100 p-3 rounded-lg rounded-tl-none flex items-center space-x-1">
+                                    <span class="w-2 h-2 bg-slate-400 rounded-full inline-block"></span>
+                                    <span class="w-2 h-2 bg-slate-400 rounded-full inline-block"></span>
+                                    <span class="w-2 h-2 bg-slate-400 rounded-full inline-block"></span>
+                                </div>
+                            </div>
+                         </div>
+                         <div class="p-4 border-t border-slate-200">
+                            <div class="w-full p-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-400 text-sm">اكتب سؤالك هنا...</div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم خدماتنا (Services Section) -->
+    <section id="services" class="py-24 md:py-40 subtle-bg">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center text-slate-900 mb-12 animate-on-scroll">خدماتنا</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div class="service-card bg-white p-8 rounded-xl shadow-lg text-center animate-on-scroll" style="--delay: 0.2s;">
+                    <div class="service-icon w-24 h-24 mx-auto mb-6 text-[var(--primary-dark)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="16" r="1"></circle><rect width="18" height="12" x="3" y="8" rx="2"></rect><path d="M10 8V6a2 2 0 0 1 4 0v2"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-900">حماية البيانات (PDPL)</h3>
+                    <p class="text-slate-600">نساعدك على بناء إطار قوي لحماية البيانات يتوافق مع النظام السعودي (PDPL)، مما يعزز ثقة عملائك ويحمي أصولك الرقمية.</p>
+                </div>
+                <div class="service-card bg-white p-8 rounded-xl shadow-lg text-center animate-on-scroll" style="--delay: 0.4s;">
+                    <div class="service-icon w-24 h-24 mx-auto mb-6 text-[var(--primary-dark)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-900">الأمن السيبراني (SAMA)</h3>
+                    <p class="text-slate-600">نقدم حلولاً متكاملة للأمن السيبراني وفق إطار مؤسسة النقد العربي السعودي (SAMA)، لتحصين بنيتك التحتية ضد التهديدات المتقدمة.</p>
+                </div>
+                <div class="service-card bg-white p-8 rounded-xl shadow-lg text-center animate-on-scroll" style="--delay: 0.6s;">
+                    <div class="service-icon w-24 h-24 mx-auto mb-6 text-[var(--primary-dark)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M18 12h2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-slate-900">حوكمة الشركات (CMA)</h3>
+                    <p class="text-slate-600">نؤسس لممارسات حوكمة رشيدة تتوافق مع لوائح هيئة السوق المالية (CMA)، مما يعزز الشفافية ويدعم قراراتك الاستراتيجية.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الأرقام (Stats Section) -->
+    <section id="stats" class="bg-slate-800 text-white py-20 md:py-24 relative overflow-hidden">
+        <div class="shape-divider absolute -top-1 left-0 w-full overflow-hidden leading-[0] transform rotate-180">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="fill-current text-slate-50"></path>
+            </svg>
+        </div>
+        <div class="container mx-auto px-4 relative">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="animate-on-scroll" style="--delay: 0.2s;">
+                    <h3 class="text-5xl font-extrabold text-[var(--primary-color)] mb-2" data-target="150">0</h3>
+                    <p class="text-lg font-semibold">عميل سعيد</p>
+                </div>
+                <div class="animate-on-scroll" style="--delay: 0.4s;">
+                    <h3 class="text-5xl font-extrabold text-[var(--primary-color)] mb-2" data-target="300">0</h3>
+                    <p class="text-lg font-semibold">مشروع مكتمل</p>
+                </div>
+                <div class="animate-on-scroll" style="--delay: 0.6s;">
+                    <h3 class="text-5xl font-extrabold text-[var(--primary-color)] mb-2" data-target="25">0</h3>
+                    <p class="text-lg font-semibold">مستشار خبير</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الباقات والاشتراكات -->
+    <section id="packages" class="py-24 md:py-40 subtle-bg">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-12 animate-on-scroll">باقاتنا وخطط الاشتراك</h2>
+            <p class="text-lg text-slate-600 max-w-4xl mx-auto mb-10 animate-on-scroll" style="--delay: 0.2s;">
+                اختر الباقة التي تناسب احتياجات عملك واستشاراتك القانونية.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-transparent hover:border-[var(--primary-color)] transition-all duration-300 animate-on-scroll" style="--delay: 0.4s;">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-2">الباقة الأساسية</h3>
+                    <p class="text-slate-500 mb-6">للبدء في رحلة الامتثال</p>
+                    <ul class="text-right text-slate-600 space-y-3 mb-8">
+                        <li>استشارة قانونية شهرية<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>تحديثات دورية للوائح<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>دعم عبر البريد الإلكتروني<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                    </ul>
+                    <a href="#request_service" data-package="الباقة الأساسية" class="cta-btn package-subscribe-btn inline-block bg-[var(--primary-color)] text-white font-extrabold py-3 px-8 rounded-full shadow-lg">اشترك الآن</a>
+                </div>
+                <div class="bg-[var(--primary-dark)] text-white p-8 rounded-xl shadow-2xl scale-105 transform transition-all duration-500 animate-on-scroll" style="--delay: 0.6s;">
+                    <p class="featured-tag text-sm font-bold bg-white text-[var(--primary-dark)] rounded-full px-4 py-1 inline-block -mt-10 mb-4 shadow-md">الأكثر شيوعاً</p>
+                    <h3 class="text-3xl font-bold mb-2">الباقة المميزة</h3>
+                    <p class="text-[var(--primary-color)] mb-6">الحل الشامل للامتثال</p>
+                    <ul class="text-right space-y-3 mb-8">
+                        <li>جميع مميزات الباقة الأساسية<span class="text-white font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>استشارة قانونية أسبوعية<span class="text-white font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>ورش عمل شهرية للامتثال<span class="text-white font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>دعم فني مباشر عبر الهاتف<span class="text-white font-bold text-lg mr-2">&#10003;</span></li>
+                    </ul>
+                    <a href="#request_service" data-package="الباقة المميزة" class="cta-btn package-subscribe-btn inline-block bg-white text-[var(--primary-dark)] font-extrabold py-3 px-8 rounded-full shadow-lg">اشترك الآن</a>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg border-2 border-transparent hover:border-[var(--primary-color)] transition-all duration-300 animate-on-scroll" style="--delay: 0.8s;">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-2">باقة الشركات</h3>
+                    <p class="text-slate-500 mb-6">حلول مخصصة للشركات الكبرى</p>
+                    <ul class="text-right text-slate-600 space-y-3 mb-8">
+                        <li>جميع مميزات الباقة المميزة<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>فريق عمل مخصص<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>استشارات على مدار الساعة<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                        <li>زيارات ميدانية دورية<span class="text-[var(--primary-color)] font-bold text-lg mr-2">&#10003;</span></li>
+                    </ul>
+                    <a href="#request_service" data-package="باقة الشركات" class="cta-btn package-subscribe-btn inline-block bg-[var(--primary-color)] text-white font-extrabold py-3 px-8 rounded-full shadow-lg">اشترك الآن</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم الشركاء المؤسسون -->
+    <section id="partners" class="py-24 md:py-40">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 animate-on-scroll">العقول المدبرة وراء نجاحنا</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-16 animate-on-scroll" style="--delay: 0.2s;">
+                تعرف على فريق القادة الذين يوجهون رؤيتنا بخبراتهم العميقة وتفانيهم في تحقيق التميز.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
+                <div class="partner-card bg-white p-6 rounded-xl shadow-lg text-center animate-on-scroll cursor-pointer group" style="--delay: 0.4s;" data-modal-target="#partner1-modal">
+                    <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-slate-200 flex items-center justify-center filter grayscale group-hover:grayscale-0 transition-all duration-300" aria-label="صورة الشريك المؤسس وتين السفياني">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">وتين السفياني</h3>
+                    <p class="text-[var(--primary-dark)] font-semibold">شريك مؤسس</p>
+                </div>
+                <div class="partner-card bg-white p-6 rounded-xl shadow-lg text-center animate-on-scroll cursor-pointer group" style="--delay: 0.5s;" data-modal-target="#partner2-modal">
+                     <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-slate-200 flex items-center justify-center filter grayscale group-hover:grayscale-0 transition-all duration-300" aria-label="صورة الشريك المؤسس رنا الحربي">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">رنا الحربي</h3>
+                    <p class="text-[var(--primary-dark)] font-semibold">شريك مؤسس</p>
+                </div>
+                <div class="partner-card bg-white p-6 rounded-xl shadow-lg text-center animate-on-scroll cursor-pointer group" style="--delay: 0.6s;" data-modal-target="#partner3-modal">
+                     <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-slate-200 flex items-center justify-center filter grayscale group-hover:grayscale-0 transition-all duration-300" aria-label="صورة الشريك المؤسس محمد الدعجاني">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">محمد الدعجاني</h3>
+                    <p class="text-[var(--primary-dark)] font-semibold">شريك مؤسس</p>
+                </div>
+                <div class="partner-card bg-white p-6 rounded-xl shadow-lg text-center animate-on-scroll cursor-pointer group" style="--delay: 0.7s;" data-modal-target="#partner4-modal">
+                     <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-slate-200 flex items-center justify-center filter grayscale group-hover:grayscale-0 transition-all duration-300" aria-label="صورة الشريك المؤسس سارة المشعلي">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">سارة المشعلي</h3>
+                    <p class="text-[var(--primary-dark)] font-semibold">شريك مؤسس</p>
+                </div>
+                <div class="partner-card bg-white p-6 rounded-xl shadow-lg text-center animate-on-scroll cursor-pointer group" style="--delay: 0.8s;" data-modal-target="#partner5-modal">
+                     <div class="w-32 h-32 rounded-full mx-auto mb-4 bg-slate-200 flex items-center justify-center filter grayscale group-hover:grayscale-0 transition-all duration-300" aria-label="صورة الشريك المؤسس عبدالرحمن الدخيّل">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900">عبدالرحمن الدخيّل</h3>
+                    <p class="text-[var(--primary-dark)] font-semibold">شريك مؤسس</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم آراء العملاء (Testimonials Section) -->
+    <section id="testimonials" class="py-24 md:py-40 subtle-bg">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p class="text-lg font-semibold text-[var(--primary-color)] mb-2 animate-on-scroll">أصداء النجاح</p>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 animate-on-scroll" style="--delay: 0.1s;">شهادات يُعتز بها</h2>
+                <p class="max-w-3xl mx-auto text-slate-600 mb-16 animate-on-scroll" style="--delay: 0.2s;">نفخر بشراكاتنا التي تتحدث عن نفسها. استمع إلى قصص النجاح مباشرة من عملائنا الذين حولنا معهم التحديات إلى إنجازات.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <div class="testimonial bg-white p-8 rounded-xl shadow-lg animate-on-scroll flex flex-col" style="--delay: 0.4s;">
+                    <div class="flex-grow mb-4 relative">
+                        <svg class="absolute top-0 right-0 h-16 w-16 text-slate-100 transform -translate-y-4" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.333 4C4.167 4 0 8.167 0 13.333c0 4.25 2.833 7.917 6.667 9.083L8 24.5h3.333l-1.167-3.333c2.083-.583 3.5-2.5 3.5-4.833C13.667 8.167 9.333 4 9.333 4zm19.334 0c-5.166 0-9.334 4.167-9.334 9.333 0 4.25 2.834 7.917 6.667 9.083L24 24.5h3.333l-1.166-3.333c2.083-.583 3.5-2.5 3.5-4.833C29.667 8.167 25.334 4 22.667 4z"></path></svg>
+                        <p class="italic text-slate-700 leading-relaxed relative z-10">"ما يميز Matrix Consult هو فهمهم العميق لطبيعة عملنا في قطاع التقنية المالية. لم تكن استشاراتهم مجرد قائمة بالمتطلبات، بل كانت حواراً بناءً نتج عنه حلول عملية ومناسبة لنموذج عملنا. شعرنا بأنهم جزء من فريقنا يعملون معنا لتحقيق الامتثال والنجاح."</p>
+                    </div>
+                    <div class="flex items-center mt-auto pt-4 border-t border-slate-200">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="mr-4">
+                            <p class="font-bold text-[var(--primary-dark)]">أحمد الغامدي</p>
+                            <p class="text-sm text-slate-500">المدير التنفيذي لشركة تقنية مالية</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial bg-white p-8 rounded-xl shadow-lg animate-on-scroll flex flex-col" style="--delay: 0.5s;">
+                    <div class="flex-grow mb-4 relative">
+                        <svg class="absolute top-0 right-0 h-16 w-16 text-slate-100 transform -translate-y-4" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.333 4C4.167 4 0 8.167 0 13.333c0 4.25 2.833 7.917 6.667 9.083L8 24.5h3.333l-1.167-3.333c2.083-.583 3.5-2.5 3.5-4.833C13.667 8.167 9.333 4 9.333 4zm19.334 0c-5.166 0-9.334 4.167-9.334 9.333 0 4.25 2.834 7.917 6.667 9.083L24 24.5h3.333l-1.166-3.333c2.083-.583 3.5-2.5 3.5-4.833C29.667 8.167 25.334 4 22.667 4z"></path></svg>
+                        <p class="italic text-slate-700 leading-relaxed relative z-10">"تحويل تحديات نظام حماية البيانات إلى فرصة لبناء ثقة أعمق مع عملائنا، هذا ما أنجزته Matrix Consult لنا. دمجوا بسلاسة بين الخبرة القانونية والفهم العملي لاحتياجاتنا، فكانت النتيجة حماية قوية لبياناتنا ورضا أكبر لعملائنا."</p>
+                    </div>
+                     <div class="flex items-center mt-auto pt-4 border-t border-slate-200">
+                        <div class="flex-shrink-0">
+                             <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="mr-4">
+                            <p class="font-bold text-[var(--primary-dark)]">سارة العتيبي</p>
+                            <p class="text-sm text-slate-500">مسؤولة الامتثال في قطاع التجزئة</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial bg-white p-8 rounded-xl shadow-lg animate-on-scroll flex flex-col" style="--delay: 0.6s;">
+                    <div class="flex-grow mb-4 relative">
+                        <svg class="absolute top-0 right-0 h-16 w-16 text-slate-100 transform -translate-y-4" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.333 4C4.167 4 0 8.167 0 13.333c0 4.25 2.833 7.917 6.667 9.083L8 24.5h3.333l-1.167-3.333c2.083-.583 3.5-2.5 3.5-4.833C13.667 8.167 9.333 4 9.333 4zm19.334 0c-5.166 0-9.334 4.167-9.334 9.333 0 4.25 2.834 7.917 6.667 9.083L24 24.5h3.333l-1.166-3.333c2.083-.583 3.5-2.5 3.5-4.833C29.667 8.167 25.334 4 22.667 4z"></path></svg>
+                        <p class="italic text-slate-700 leading-relaxed relative z-10">"لولا الأسس المتينة للحوكمة التي أرستها Matrix Consult، لما تمكنا من تحقيق هذا النمو السريع وجذب ثقة المستثمرين. لقد كانوا أكثر من مجرد مستشارين، بل مهندسين لهيكل الشركة الذي ضمن لنا الانطلاق بقوة نحو المستقبل."</p>
+                    </div>
+                    <div class="flex items-center mt-auto pt-4 border-t border-slate-200">
+                        <div class="flex-shrink-0">
+                             <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        </div>
+                        <div class="mr-4">
+                            <p class="font-bold text-[var(--primary-dark)]">خالد الشمري</p>
+                            <p class="text-sm text-slate-500">مؤسس شركة ناشئة</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم طلب الخدمة - نموذج الاتصال (تم نقله هنا) -->
+    <section id="request_service" class="py-24 md:py-40 subtle-bg">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 animate-on-scroll">اطلب استشارتك الآن</h2>
+            <p class="text-lg text-slate-600 max-w-4xl mx-auto mb-10 animate-on-scroll" style="--delay: 0.2s;">
+                املأ النموذج أدناه وسيتواصل معك فريقنا المختص في أقرب وقت.
+            </p>
+            <div class="max-w-xl mx-auto bg-slate-100 p-8 rounded-xl shadow-lg animate-on-scroll" style="--delay: 0.4s;">
+                <form id="service-request-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID_HERE" method="POST" class="space-y-6">
+                    <div>
+                        <select id="package-selection" name="الباقة المختارة" required class="w-full p-4 rounded-lg border border-slate-300 transition-all duration-300">
+                            <option value="" disabled selected>اختر الباقة المناسبة...</option>
+                            <option value="الباقة الأساسية">الباقة الأساسية</option>
+                            <option value="الباقة المميزة">الباقة المميزة</option>
+                            <option value="باقة الشركات">باقة الشركات</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="service-type" name="الخدمة المطلوبة" required class="w-full p-4 rounded-lg border border-slate-300 transition-all duration-300">
+                            <option value="" disabled selected>اختر نوع الخدمة...</option>
+                            <option value="استشارات الامتثال لنظام حماية البيانات الشخصية (PDPL)">استشارات الامتثال لنظام حماية البيانات الشخصية (PDPL)</option>
+                            <option value="استشارات الأمن السيبراني (متوافق مع SAMA)">استشارات الأمن السيبراني (متوافق مع SAMA)</option>
+                            <option value="استشارات حوكمة الشركات (متوافق مع CMA)">استشارات حوكمة الشركات (متوافق مع CMA)</option>
+                            <option value="خدمات إصدار التراخيص النظامية">خدمات إصدار التراخيص النظامية</option>
+                            <option value="طلب استشارة فقط">طلب استشارة فقط</option>
+                            <option value="حلول مخصصة حسب الطلب">حلول مخصصة حسب الطلب</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" id="full-name" name="الاسم الكامل" placeholder="الاسم الكامل" required class="w-full p-4 rounded-lg border border-slate-300 transition-all duration-300">
+                    </div>
+                    <div>
+                        <input type="email" id="email" name="البريد الإلكتروني" placeholder="البريد الإلكتروني" required class="w-full p-4 rounded-lg border border-slate-300 transition-all duration-300">
+                    </div>
+                    <div>
+                        <input type="tel" id="phone" name="رقم الهاتف" placeholder="رقم الهاتف (اختياري)" class="w-full p-4 rounded-lg border border-slate-300 transition-all duration-300">
+                    </div>
+                    <div>
+                        <textarea id="message" rows="5" name="الرسالة" placeholder="أخبرنا عن متطلباتك بالتفصيل" required class="w-full p-4 rounded-lg border border-slate-300 transition-all duration-300"></textarea>
+                    </div>
+                    <input type="hidden" name="_subject" value="طلب خدمة جديد من موقع Matrix Consult">
+                    <button type="submit" class="cta-btn w-full bg-[var(--primary-dark)] text-white font-bold py-4 rounded-lg shadow-md hover:bg-[var(--primary-dark)]">
+                        إرسال الطلب
+                    </button>
+                </form>
+                <div id="success-message" class="hidden mt-6 p-4 bg-green-100 text-green-700 rounded-lg">
+                    شكراً لك! تم استلام طلبك بنجاح وسنتواصل معك قريباً.
+                </div>
+                <div id="error-message" class="hidden mt-6 p-4 bg-red-100 text-red-700 rounded-lg">
+                    عذراً، حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى لاحقاً.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الأسئلة الشائعة (تم نقله هنا) -->
+    <section id="faq" class="bg-slate-100 py-24 md:py-40">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-center text-slate-900 mb-12 animate-on-scroll">الأسئلة الشائعة</h2>
+            <div class="max-w-3xl mx-auto space-y-4" id="faq-accordion">
+                <div class="faq-item bg-white rounded-xl shadow-md animate-on-scroll" style="--delay: 0.2s;">
+                    <div class="faq-question flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="text-xl font-semibold text-slate-900">ما هي القطاعات التي تتخصصون في خدمتها؟</h3>
+                        <div class="faq-toggle-icon text-slate-500 text-2xl font-thin">+</div>
+                    </div>
+                    <div class="faq-answer text-slate-600 px-6">
+                        <p>لدينا خبرة واسعة في خدمة قطاعات متعددة تشمل التقنية المالية (FinTech)، التجزئة، الرعاية الصحية، والشركات الناشئة. حلولنا مصممة لتكون مرنة وقابلة للتكيف مع المتطلبات الفريدة لكل قطاع.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-xl shadow-md animate-on-scroll" style="--delay: 0.4s;">
+                    <div class="faq-question flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="text-xl font-semibold text-slate-900">ما هي الخطوة الأولى لبدء العمل معكم؟</h3>
+                        <div class="faq-toggle-icon text-slate-500 text-2xl font-thin">+</div>
+                    </div>
+                    <div class="faq-answer text-slate-600 px-6">
+                        <p>الخطوة الأولى هي حجز استشارة أولية (طلب استشارة فقط) عبر النموذج أعلاه. خلال هذه الجلسة، سنستمع لتحدياتك وأهدافك لنقدم لك تصوراً مبدئياً عن كيفية مساعدتك.</p>
+                    </div>
+                </div>
+                <div class="faq-item bg-white rounded-xl shadow-md animate-on-scroll" style="--delay: 0.6s;">
+                    <div class="faq-question flex justify-between items-center p-6 cursor-pointer">
+                        <h3 class="text-xl font-semibold text-slate-900">هل تقتصر خدماتكم على اللوائح المذكورة فقط؟</h3>
+                        <div class="faq-toggle-icon text-slate-500 text-2xl font-thin">+</div>
+                    </div>
+                    <div class="faq-answer text-slate-600 px-6">
+                        <p>بينما نركز على لوائح SAMA, CMA, و PDPL، فإن خبرتنا تمتد لتشمل مجموعة واسعة من متطلبات الامتثال المحلية والدولية. "حلول مخصصة حسب الطلب" هي إحدى خدماتنا الأساسية لتلبية احتياجاتك الخاصة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم الاشتراك في النشرة الإخبارية -->
+    <section id="newsletter" class="bg-slate-100 py-24 md:py-32">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4 animate-on-scroll">ابق على اطلاع</h2>
+                <p class="text-lg text-slate-600 mb-8 animate-on-scroll" style="--delay: 0.2s;">
+                    اشترك في نشرتنا الإخبارية الشهرية لتحصل على أحدث الرؤى والتحليلات في عالم الامتثال مباشرة في بريدك الإلكتروني.
+                </p>
+                <form id="newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto animate-on-scroll" style="--delay: 0.4s;">
+                    <input type="email" placeholder="أدخل بريدك الإلكتروني" required class="flex-grow p-4 rounded-lg border border-slate-300 transition-all duration-300">
+                    <button type="submit" class="cta-btn bg-[var(--primary-dark)] text-white font-bold py-4 px-8 rounded-lg shadow-md">
+                        اشتراك
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم التواصل (Contact Section) -->
+    <section id="contact" class="bg-[var(--primary-dark)] text-white py-24 md:py-40 rounded-t-3xl shadow-xl">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-6 animate-on-scroll">ابدأ حوارك معنا اليوم</h2>
+            <p class="text-lg md:text-xl font-light mb-12 max-w-2xl mx-auto animate-on-scroll" style="--delay: 0.2s;">
+                سواء كنت بحاجة إلى استشارة متعمقة أو لديك استفسار بسيط، فريقنا جاهز للاستماع وتقديم الدعم.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8">
+                <!-- بطاقة الاتصال الهاتفي -->
+                <a href="tel:+966552054053" title="اتصل بنا على الرقم +966552054053" class="group flex items-center w-full md:w-auto bg-white/10 backdrop-blur-sm border border-white/20 p-4 rounded-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 animate-on-scroll" style="--delay: 0.4s;">
+                    <div class="bg-white text-[var(--primary-dark)] p-3 rounded-full group-hover:bg-[var(--accent-color)] transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </div>
+                    <div class="text-right mr-4">
+                        <p class="font-bold text-lg">اتصل بنا</p>
+                        <p class="text-slate-300 group-hover:text-white transition-colors duration-300" dir="ltr">+966 55 205 4053</p>
+                    </div>
+                </a>
+                <!-- بطاقة البريد الإلكتروني -->
+                <a href="mailto:info@matrixconsult.sa" title="أرسل بريدًا إلكترونيًا إلى info@matrixconsult.sa" class="group flex items-center w-full md:w-auto bg-white/10 backdrop-blur-sm border border-white/20 p-4 rounded-xl transition-all duration-300 hover:bg-white/20 hover:scale-105 animate-on-scroll" style="--delay: 0.6s;">
+                    <div class="bg-white text-[var(--primary-dark)] p-3 rounded-full group-hover:bg-[var(--accent-color)] transition-colors duration-300">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </div>
+                    <div class="text-right mr-4">
+                        <p class="font-bold text-lg">راسلنا عبر البريد</p>
+                        <p class="text-slate-300 group-hover:text-white transition-colors duration-300">info@matrixconsult.sa</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- الفوتر (Footer) -->
+    <footer class="bg-slate-900 text-white py-12">
+        <div class="container mx-auto text-center px-4">
+            <div class="mb-6 flex justify-center gap-6">
+                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors duration-300">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="text-slate-400 hover:text-white transition-colors duration-300">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+            </div>
+            <p class="text-sm md:text-base">&copy; <span id="copyright-year">2025</span> Matrix Consult | جميع الحقوق محفوظة</p>
+            <div class="mt-4 text-sm space-x-4 space-x-reverse">
+                <a href="#" data-modal-target="#terms-modal" class="text-slate-400 hover:text-white transition-colors duration-300">الشروط والأحكام</a>
+                <span class="text-slate-600">|</span>
+                <a href="#" data-modal-target="#privacy-modal" class="text-slate-400 hover:text-white transition-colors duration-300">سياسة الخصوصية</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- زر العودة للأعلى -->
+    <a href="#home" id="back-to-top" class="cta-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" /></svg>
+    </a>
+
+    <!-- إشعار ملفات تعريف الارتباط -->
+    <div id="cookie-banner" class="hidden max-w-md w-full bg-white shadow-2xl rounded-lg p-4 flex items-center justify-between">
+        <p class="text-sm text-slate-600">يستخدم هذا الموقع ملفات تعريف الارتباط لتحسين تجربتك.</p>
+        <button id="accept-cookies" class="cta-btn bg-[var(--primary-color)] text-white text-sm font-bold py-2 px-4 rounded-lg">
+            أوافق
+        </button>
+    </div>
+
+    <!-- نوافذ الشركاء المنبثقة (Modals) -->
+    <!-- Modal 1: وتين السفياني -->
+    <div id="partner1-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-lg w-full relative text-slate-900 text-right">
+            <button class="modal-close-btn absolute top-4 left-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900">وتين السفياني</h3>
+            <p class="text-[var(--primary-dark)] font-semibold mb-4">شريك مؤسس</p>
+            <div class="text-sm space-y-4">
+                <div>
+                    <p class="font-bold text-slate-700">المؤهل العلمي</p>
+                    <p class="text-slate-600">بكالوريوس في القانون، جامعة الملك عبدالعزيز</p>
+                </div>
+                <div class="milestone-box">
+                    <p class="milestone-title">علامة فارقة في المسيرة</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="milestone-star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>خريجة برنامج القيادات القانونية الشابة، يهدف إلى إعداد نخبة قادة المستقبل</p>
+                </div>
+                <div class="partner-contact">
+                    <p class="font-bold text-slate-700">للتواصل:</p>
+                    <a href="tel:+966552054053" title="اتصل على +966552054053"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+966552054053</a>
+                    <a href="mailto:Alsufyani.wateen@gmail.com" title="أرسل بريدًا إلكترونيًا إلى Alsufyani.wateen@gmail.com"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>Alsufyani.wateen@gmail.com</a>
+                    <a href="https://www.linkedin.com/in/wateen-alsufyani-291b332b1" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>ملف LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: رنا الحربي -->
+    <div id="partner2-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-lg w-full relative text-slate-900 text-right">
+             <button class="modal-close-btn absolute top-4 left-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900">رنا الحربي</h3>
+            <p class="text-[var(--primary-dark)] font-semibold mb-4">شريك مؤسس</p>
+            <div class="text-sm space-y-4">
+                <div>
+                    <p class="font-bold text-slate-700">المؤهل العلمي</p>
+                    <p class="text-slate-600">بكالوريوس قانون، جامعة القصيم</p>
+                </div>
+                <div class="milestone-box">
+                    <p class="milestone-title">علامة فارقة في المسيرة</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="milestone-star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>خريجة برنامج القيادات القانونية الشابة، يهدف إلى إعداد نخبة قادة المستقبل</p>
+                </div>
+                <div class="partner-contact">
+                    <p class="font-bold text-slate-700">للتواصل:</p>
+                    <a href="tel:+966535963268" title="اتصل على +966535963268"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+966535963268</a>
+                    <a href="https://linkedin.com/in/rana-alharbi5" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>ملف LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal 3: محمد الدعجاني -->
+    <div id="partner3-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-lg w-full relative text-slate-900 text-right">
+             <button class="modal-close-btn absolute top-4 left-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900">محمد الدعجاني</h3>
+            <p class="text-[var(--primary-dark)] font-semibold mb-4">شريك مؤسس</p>
+            <div class="text-sm space-y-4">
+                <div>
+                    <p class="font-bold text-slate-700">المؤهل العلمي</p>
+                    <p class="text-slate-600">بكالوريوس قانون، جامعة الملك سعود</p>
+                </div>
+                <div class="milestone-box">
+                    <p class="milestone-title">علامة فارقة في المسيرة</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="milestone-star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>خريج برنامج القيادات القانونية الشابة، يهدف إلى إعداد نخبة قادة المستقبل</p>
+                </div>
+                <div class="partner-contact">
+                    <p class="font-bold text-slate-700">للتواصل:</p>
+                    <a href="tel:+966551242847" title="اتصل على +966551242847"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+966551242847</a>
+                    <a href="https://www.linkedin.com/in/mohammed-aldajani-6bb9702a5" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>ملف LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal 4: سارة المشعلي -->
+    <div id="partner4-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-lg w-full relative text-slate-900 text-right">
+             <button class="modal-close-btn absolute top-4 left-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900">سارة المشعلي</h3>
+            <p class="text-[var(--primary-dark)] font-semibold mb-4">شريك مؤسس</p>
+            <div class="text-sm space-y-4">
+                <div>
+                    <p class="font-bold text-slate-700">المؤهل العلمي</p>
+                    <p class="text-slate-600">بكالوريوس قانون، جامعة الملك سعود</p>
+                </div>
+                <div class="milestone-box">
+                    <p class="milestone-title">علامة فارقة في المسيرة</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="milestone-star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>خريجة برنامج القيادات القانونية الشابة، يهدف إلى إعداد نخبة قادة المستقبل</p>
+                </div>
+                <div class="partner-contact">
+                    <p class="font-bold text-slate-700">للتواصل:</p>
+                    <a href="tel:+966506250833" title="اتصل على +966506250833"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>+966506250833</a>
+                    <a href="https://www.linkedin.com/in/sara-almashali-841655260" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>ملف LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal 5: عبدالرحمن الدخيّل -->
+    <div id="partner5-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-lg w-full relative text-slate-900 text-right">
+             <button class="modal-close-btn absolute top-4 left-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h3 class="text-2xl font-bold text-slate-900">عبدالرحمن الدخيّل</h3>
+            <p class="text-[var(--primary-dark)] font-semibold mb-4">شريك مؤسس</p>
+            <div class="text-sm space-y-4">
+                <div>
+                    <p class="font-bold text-slate-700">المؤهل العلمي</p>
+                    <p class="text-slate-600">بكالوريوس قانون، جامعة الملك سعود</p>
+                </div>
+                <div class="milestone-box">
+                    <p class="milestone-title">علامة فارقة في المسيرة</p>
+                    <p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="milestone-star"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"></path></svg>خريج برنامج القيادات القانونية الشابة، يهدف إلى إعداد نخبة قادة المستقبل</p>
+                </div>
+                <div class="partner-contact">
+                    <p class="font-bold text-slate-700">للتواصل:</p>
+                    <a href="https://www.linkedin.com/in/abdulrahman-aldukhail-76034a304" target="_blank" rel="noopener noreferrer"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>ملف LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة منبثقة (Modal) للشروط والأحكام -->
+    <div id="terms-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative text-slate-900">
+            <button class="modal-close-btn absolute top-4 right-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-extrabold mb-4 border-b pb-2">الشروط والأحكام</h2>
+            <div class="prose max-w-none text-right">
+                 <p>مرحباً بكم في موقع Matrix Consult. باستخدامكم لهذا الموقع، فإنكم توافقون على الالتزام بالشروط والأحكام التالية:</p>
+                <ol class="list-decimal pr-4 space-y-2 text-sm md:text-base">
+                    <li><strong>الخدمات المقدمة:</strong> تلتزم Matrix Consult بتقديم خدمات استشارية في مجالات الامتثال وحماية البيانات والأمن السيبراني وفقاً لأعلى المعايير المهنية.</li>
+                    <li><strong>المسؤولية:</strong> يتم تقديم المعلومات على هذا الموقع لأغراض إرشادية فقط. لا تتحمل الشركة مسؤولية أي قرارات تتخذونها بناءً على هذه المعلومات دون استشارة مباشرة مع فريقنا.</li>
+                    <li><strong>الملكية الفكرية:</strong> جميع محتويات الموقع، بما في ذلك النصوص، الرسومات، والشعارات، هي ملك لـ Matrix Consult أو الجهات المرخصة لها، وهي محمية بقوانين الملكية الفكرية.</li>
+                    <li><strong>السرية والخصوصية:</strong> نلتزم بالحفاظ على سرية معلوماتكم وبياناتكم الشخصية وعدم مشاركتها مع أي طرف ثالث إلا بموافقة صريحة منكم أو بموجب أمر قضائي.</li>
+                    <li><strong>التعديلات:</strong> تحتفظ الشركة بالحق في تعديل هذه الشروط والأحكام في أي وقت دون إشعار مسبق. يُعد استمراركم في استخدام الموقع بعد أي تعديل موافقة منكم على هذه التغييرات.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <!-- نافذة منبثقة (Modal) لسياسة الخصوصية -->
+    <div id="privacy-modal" class="modal-overlay fixed inset-0 z-[100] bg-black bg-opacity-50 hidden items-center justify-center p-4">
+        <div class="modal-content rounded-lg shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[80vh] overflow-y-auto relative text-slate-900">
+            <button class="modal-close-btn absolute top-4 right-4 text-slate-500 hover:text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <h2 class="text-2xl md:text-3xl font-extrabold mb-4 border-b pb-2">سياسة الخصوصية</h2>
+            <div class="prose max-w-none text-right">
+                <p>توضح سياسة الخصوصية هذه كيفية جمع واستخدام وحماية معلوماتكم الشخصية.</p>
+                <ol class="list-decimal pr-4 space-y-2 text-sm md:text-base">
+                    <li><strong>جمع المعلومات:</strong> نقوم بجمع معلوماتكم عندما تقومون بملء نموذج الاتصال أو الاشتراك في خدماتنا. قد تشمل هذه المعلومات الاسم، البريد الإلكتروني، ورقم الهاتف.</li>
+                    <li><strong>استخدام المعلومات:</strong> نستخدم المعلومات التي نجمعها لتقديم خدماتنا، وتحسين تجربتكم على الموقع، وإرسال تحديثات تسويقية (بموافقتكم).</li>
+                    <li><strong>حماية المعلومات:</strong> نحن نتخذ إجراءات أمنية صارمة لحماية معلوماتكم الشخصية من الوصول غير المصرح به أو التعديل أو الإفصاح.</li>
+                    <li><strong>مشاركة المعلومات:</strong> لا نقوم ببيع أو تأجير أو مشاركة معلوماتكم الشخصية مع أطراف ثالثة إلا في الحالات التي تتطلبها القوانين أو لتقديم الخدمات المطلوبة منكم.</li>
+                    <li><strong>حقوقكم:</strong> يحق لكم الوصول إلى معلوماتكم الشخصية التي نحتفظ بها، وطلب تصحيحها أو حذفها. يمكنكم الاتصال بنا لتقديم أي طلب بهذا الخصوص.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- المستشار الذكي (AI Chatbot) -->
+<div id="ai-advisor-container">
+    <!-- Chat Window -->
+    <div id="ai-chat-window" class="hidden fixed bottom-24 right-4 sm:right-8 w-[calc(100%-2rem)] max-w-sm h-[70vh] max-h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col transition-all duration-300 origin-bottom-right transform scale-95 opacity-0 z-[60]">
+        <!-- Header -->
+        <div class="bg-[var(--primary-dark)] text-white p-4 rounded-t-2xl flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-lg">المستشار الذكي</h3>
+                <p class="text-xs text-slate-300 flex items-center gap-2"><span class="w-2 h-2 bg-green-400 rounded-full"></span>متصل الآن</p>
+            </div>
+            <button id="ai-chat-close-btn" class="text-2xl font-thin leading-none p-1 hover:text-slate-300">&times;</button>
+        </div>
+        <!-- Messages -->
+        <div id="ai-chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4">
+            <div class="flex items-start gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                    <!-- AI Icon -->
+                    <svg class="w-5 h-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg>
+                </div>
+                <div class="bg-slate-100 p-3 rounded-lg rounded-tl-none">
+                    <p class="text-sm">أهلاً بك في Matrix Consult! كيف يمكنني مساعدتك اليوم في مسائل الامتثال؟</p>
+                </div>
+            </div>
+        </div>
+        <!-- Input -->
+        <div class="p-4 border-t border-slate-200">
+            <form id="ai-chat-form" class="flex gap-2">
+                <input type="text" id="ai-chat-input" placeholder="اكتب سؤالك هنا..." class="flex-grow p-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]">
+                <button type="submit" class="cta-btn bg-[var(--primary-dark)] text-white p-3 rounded-lg">
+                    <!-- Send Icon -->
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- Toggle Button -->
+    <button id="ai-advisor-toggle" class="cta-btn fixed bottom-6 right-4 sm:right-8 w-16 h-16 bg-[var(--primary-dark)] text-white rounded-full shadow-2xl flex items-center justify-center z-50">
+        <!-- Chatbot Icon -->
+        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg>
+    </button>
+</div>
+
+
+<!-- Dashboard Portal (Fullscreen Modal) -->
+<div id="dashboard-portal">
+    <div id="loading-screen">
+        <div class="text-center">
+            <div class="spinner mx-auto"></div>
+            <p class="mt-4 text-lg text-slate-300">جاري تحميل بيانات الامتثال...</p>
+        </div>
+    </div>
+    <div id="dashboard-content" class="container mx-auto p-6 md:p-8">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+            <div>
+                <h1 id="dashboard-welcome" class="text-3xl font-bold">لوحة التحكم الحية</h1>
+                <p id="dashboard-last-login" class="text-sm text-slate-400 font-mono"></p>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <label for="live-update-toggle-2" class="font-semibold flex items-center gap-2 cursor-pointer">
+                        <span class="text-slate-300">تحديث مباشر</span>
+                    </label>
+                    <label class="toggle-switch"><input type="checkbox" id="live-update-toggle-2"><span class="slider"></span></label>
+                </div>
+                <button id="dashboard-close-btn" class="bg-white/10 p-2 rounded-full hover:bg-white/20 transition-colors">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- KPIs -->
+            <div class="widget kpi-widget">
+                <div class="widget-title"><h3>مؤشر الامتثال العام</h3></div>
+                <p class="text-5xl font-bold kpi-value" id="kpi-compliance">97.2<span class="text-3xl opacity-70">%</span></p>
+            </div>
+            <div class="widget kpi-widget">
+                <div class="widget-title"><h3>المخاطر النشطة</h3></div>
+                <p class="text-5xl font-bold kpi-value" id="kpi-risks">12</p>
+            </div>
+            <div class="widget kpi-widget">
+                <div class="widget-title"><h3>التنبيهات المفتوحة</h3></div>
+                <p class="text-5xl font-bold kpi-value" id="kpi-alerts">3</p>
+            </div>
+            <div class="widget kpi-widget">
+                <div class="widget-title"><h3>السياسات المراجعة</h3></div>
+                <p class="text-5xl font-bold kpi-value" id="kpi-policies">85<span class="text-3xl opacity-70">%</span></p>
+            </div>
+
+            <!-- Main Chart -->
+            <div class="widget main-chart-widget">
+                <div class="widget-title">
+                    <h3>تطور الامتثال (آخر 6 أشهر)</h3>
+                    <div class="info-icon relative"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg><span class="tooltip">يعرض هذا المخطط النسبة المئوية للتحسن في الامتثال العام خلال الأشهر الستة الماضية.</span></div>
+                </div>
+                <div class="h-80"><canvas id="compliance-timeline-chart"></canvas></div>
+            </div>
+
+            <!-- Log -->
+            <div class="widget log-widget flex flex-col">
+                <div class="widget-title"><h3>سجل التدقيق المباشر</h3></div>
+                <ul id="audit-log" class="space-y-3 flex-grow overflow-y-auto pr-2"></ul>
+            </div>
+            
+            <!-- Heatmap -->
+            <div class="widget heatmap-widget">
+                <div class="widget-title">
+                    <h3>مصفوفة المخاطر</h3>
+                    <div class="info-icon relative"><svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg><span class="tooltip">تقييم المخاطر بناءً على شدة تأثيرها واحتمالية وقوعها. الهدف هو نقل المخاطر من اللون الأحمر إلى الأخضر.</span></div>
+                </div>
+                <div class="heatmap-container">
+                    <div class="heatmap-y-axis">
+                        <span>عالية</span><span>متوسطة</span><span>منخفضة</span>
+                    </div>
+                    <div>
+                        <div class="heatmap-grid"></div>
+                        <div class="heatmap-x-axis mt-2">
+                            <span>منخفضة</span><span></span><span>متوسطة</span><span></span><span>عالية</span>
+                        </div>
+                        <p class="text-center mt-1 text-sm text-slate-300">الاحتمالية</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<!-- JavaScript لإدارة التفاعلات -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- Main Page Logic ---
+        const mainContent = document.getElementById('main-content');
+        const launchBtn = document.getElementById('launch-dashboard-btn');
+        const dashboardPortal = document.getElementById('dashboard-portal');
+        const loadingScreen = document.getElementById('loading-screen');
+        const closeBtn = document.getElementById('dashboard-close-btn');
+
+        if(launchBtn) {
+            launchBtn.addEventListener('click', () => {
+                mainContent.style.opacity = '0';
+                dashboardPortal.classList.add('active');
+                
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                    dashboardPortal.classList.add('loaded');
+                    initializeDashboard();
+                }, 1500);
+            });
+        }
+
+        if(closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                mainContent.style.opacity = '1';
+                dashboardPortal.classList.remove('active', 'loaded');
+                loadingScreen.classList.remove('hidden');
+                if (liveUpdateInterval) {
+                    clearInterval(liveUpdateInterval);
+                    liveUpdateInterval = null;
+                }
+            });
+        }
+
+        // منطق قائمة التنقل للوضع المحمول
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+
+        const toggleMobileMenu = () => {
+            mobileMenu.classList.toggle('hidden');
+            hamburgerIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        };
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // منطق شريط التنقل (النافبار) عند التمرير
+        const navbar = document.getElementById('navbar');
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+                backToTopButton.classList.add('show');
+            } else {
+                navbar.classList.remove('scrolled');
+                backToTopButton.classList.remove('show');
+            }
+        });
+        
+        // منطق نموذج طلب الخدمة
+        const form = document.getElementById('service-request-form');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+        form.addEventListener('submit', async (e) => { 
+            e.preventDefault();
+            const formData = new FormData(form);
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    successMessage.classList.remove('hidden');
+                    form.reset();
+                } else {
+                    errorMessage.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                errorMessage.classList.remove('hidden');
+            }
+        });
+
+        // منطق IntersectionObserver لإضافة الحركات الديناميكية
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    if (entry.target.hasAttribute('data-target')) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-on-scroll').forEach(element => observer.observe(element));
+
+        const animateCounter = (element) => { 
+            const target = +element.getAttribute('data-target');
+            const duration = 2000;
+            const stepTime = 20;
+            let current = 0;
+            const increment = target / (duration / stepTime);
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    element.innerText = target.toLocaleString('ar-EG') + '+';
+                } else {
+                    element.innerText = Math.ceil(current).toLocaleString('ar-EG');
+                }
+            }, stepTime);
+         };
+        
+        // منطق عام لفتح وإغلاق النوافذ المنبثقة
+        const modalTriggers = document.querySelectorAll('[data-modal-target]');
+        const allModals = document.querySelectorAll('.modal-overlay');
+
+        function openModal(modal) {
+            if (!modal) return;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modal) {
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        modalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                if(trigger.getAttribute('href') === '#') {
+                    e.preventDefault();
+                }
+                const modalId = trigger.getAttribute('data-modal-target');
+                const modal = document.querySelector(modalId);
+                openModal(modal);
+            });
+        });
+
+        allModals.forEach(modal => {
+            const closeButton = modal.querySelector('.modal-close-btn');
+            if (closeButton) {
+                closeButton.addEventListener('click', () => closeModal(modal));
+            }
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        });
+
+        // منطق الأكورديون للأسئلة الشائعة
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const currentlyOpen = document.querySelector('.faq-item.open');
+                if (currentlyOpen && currentlyOpen !== item) {
+                    currentlyOpen.classList.remove('open');
+                }
+                item.classList.toggle('open');
+            });
+        });
+
+        // منطق إشعار ملفات تعريف الارتباط
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptCookiesBtn = document.getElementById('accept-cookies');
+
+        if (!localStorage.getItem('cookiesAccepted')) {
+            cookieBanner.classList.remove('hidden');
+        } else {
+             cookieBanner.classList.add('hidden');
+        }
+
+        acceptCookiesBtn.addEventListener('click', () => {
+            localStorage.setItem('cookiesAccepted', 'true');
+            cookieBanner.classList.add('hidden');
+        });
+        
+        // منطق جديد: التمرير وتعبئة الباقة عند الضغط على "اشترك الآن"
+        const subscribeButtons = document.querySelectorAll('.package-subscribe-btn');
+        const packageDropdown = document.getElementById('package-selection');
+        
+        subscribeButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault(); 
+                const packageName = button.dataset.package;
+                if (packageDropdown && packageName) {
+                    packageDropdown.value = packageName;
+                }
+                const formSection = document.querySelector(button.getAttribute('href'));
+                if (formSection) {
+                    formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // تحديث سنة حقوق النشر تلقائياً
+        const copyrightYear = document.getElementById('copyright-year');
+        if(copyrightYear) {
+            copyrightYear.textContent = new Date().getFullYear();
+        }
+
+        // --- AI Advisor Logic ---
+        const advisorToggle = document.getElementById('ai-advisor-toggle');
+        const chatWindow = document.getElementById('ai-chat-window');
+        const closeChatBtn = document.getElementById('ai-chat-close-btn');
+        const chatForm = document.getElementById('ai-chat-form');
+        const chatInput = document.getElementById('ai-chat-input');
+        const chatMessages = document.getElementById('ai-chat-messages');
+        const showcaseLaunchBtn = document.getElementById('showcase-launch-ai');
+
+        if (showcaseLaunchBtn) {
+            showcaseLaunchBtn.addEventListener('click', () => {
+                if (!chatWindow.classList.contains('open')) {
+                     advisorToggle.click();
+                }
+            });
+        }
+
+        advisorToggle.addEventListener('click', () => {
+            chatWindow.classList.toggle('hidden');
+            // A small trick to trigger the transition
+            setTimeout(() => {
+                chatWindow.classList.toggle('open');
+            }, 10);
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatWindow.classList.remove('open');
+            setTimeout(() => {
+                chatWindow.classList.add('hidden');
+            }, 300);
+        });
+        
+        chatForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
+
+            appendMessage(userMessage, 'user');
+            chatInput.value = '';
+
+            showTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator();
+                const aiResponse = getAIResponse(userMessage);
+                appendMessage(aiResponse, 'ai');
+            }, 1500 + Math.random() * 500);
+        });
+
+        function appendMessage(text, sender) {
+            const messageWrapper = document.createElement('div');
+            if (sender === 'user') {
+                messageWrapper.innerHTML = `
+                <div class="flex items-start gap-2.5 justify-end">
+                    <div class="bg-[var(--primary-color)] text-white p-3 rounded-lg rounded-br-none">
+                        <p class="text-sm">${text}</p>
+                    </div>
+                </div>`;
+            } else { // AI
+                messageWrapper.innerHTML = `
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg>
+                    </div>
+                    <div class="bg-slate-100 p-3 rounded-lg rounded-tl-none">
+                        <p class="text-sm">${text}</p>
+                    </div>
+                </div>`;
+            }
+            chatMessages.appendChild(messageWrapper);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingIndicator = document.createElement('div');
+            typingIndicator.id = 'typing-indicator';
+            typingIndicator.innerHTML = `
+            <div class="flex items-start gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="12" width="8" height="8" rx="2"/><path d="M8 12v-2a2 2 0 1 1 4 0v2"/><path d="M12 12h8"/><path d="M16 12v-2a2 2 0 1 0-4 0v2"/></svg>
+                </div>
+                <div class="ai-typing-indicator bg-slate-100 p-3 rounded-lg rounded-tl-none flex items-center space-x-1">
+                    <span class="w-2 h-2 bg-slate-400 rounded-full inline-block"></span>
+                    <span class="w-2 h-2 bg-slate-400 rounded-full inline-block"></span>
+                    <span class="w-2 h-2 bg-slate-400 rounded-full inline-block"></span>
+                </div>
+            </div>`;
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        function getAIResponse(message) {
+            const responses = {
+                "default": "شكراً لسؤالك. لتقديم إجابة دقيقة، يرجى ملء نموذج طلب الخدمة وسيقوم أحد خبرائنا بالتواصل معك. هل يمكنني مساعدتك في شيء آخر؟",
+                "باقة": "لدينا ثلاث باقات: الأساسية، المميزة، وباقة الشركات. يمكنك الاطلاع على تفاصيلها في قسم 'الباقات'. أي واحدة تثير اهتمامك؟",
+                "خدمات": "نحن متخصصون في حماية البيانات (PDPL)، الأمن السيبراني (SAMA)، وحوكمة الشركات (CMA). هل تود معرفة المزيد عن خدمة معينة؟",
+                "شكرا": "على الرحب والسعة! أنا هنا للمساعدة في أي وقت.",
+            };
+            const lowerCaseMessage = message.toLowerCase();
+            if (lowerCaseMessage.includes('باقة') || lowerCaseMessage.includes('باقات')) {
+                return responses['باقة'];
+            }
+            if (lowerCaseMessage.includes('خدمة') || lowerCaseMessage.includes('خدمات')) {
+                return responses['خدمات'];
+            }
+            if (lowerCaseMessage.includes('شكرا')) {
+                return responses['شكرا'];
+            }
+            return responses['default'];
+        }
+        
+        // --- Dashboard Logic ---
+        let liveUpdateInterval;
+        let charts = {};
+        let isDashboardInitialized = false;
+        
+        function initializeDashboard() {
+            if (isDashboardInitialized) return;
+            
+            document.getElementById('dashboard-welcome').textContent = 'مرحباً بك، شركة رؤية المستقبل';
+            const now = new Date();
+            document.getElementById('dashboard-last-login').textContent = `آخر تسجيل دخول: ${now.toLocaleDateString('ar-SA')} - ${now.toLocaleTimeString('ar-SA')}`;
+
+            renderAllCharts();
+            renderAuditLog(true);
+            renderHeatmap();
+            
+            const liveToggle = document.getElementById('live-update-toggle-2');
+            liveToggle.checked = false;
+            liveToggle.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    if(!liveUpdateInterval) liveUpdateInterval = setInterval(updateDashboardData, 2000);
+                } else {
+                    clearInterval(liveUpdateInterval);
+                    liveUpdateInterval = null;
+                }
+            });
+            isDashboardInitialized = true;
+        }
+        
+        function renderAllCharts() {
+            // Timeline Chart
+            const timelineCtx = document.getElementById('compliance-timeline-chart')?.getContext('2d');
+            if(!timelineCtx) return;
+            const months = ['مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس'];
+            if(charts.timeline) charts.timeline.destroy();
+            charts.timeline = new Chart(timelineCtx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'نسبة الامتثال', data: [85, 88, 87, 92, 95, 97.2],
+                        borderColor: 'rgba(126, 189, 194, 1)', backgroundColor: 'rgba(126, 189, 194, 0.2)',
+                        fill: true, tension: 0.4,
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: false, min: 80, max: 100, ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        x: { ticks: { color: 'rgba(255,255,255,0.7)' }, grid: { display: false } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+        
+        const auditLogData = [];
+        const auditSamples = [ { user: "system", action: "فحص تلقائي للثغرات", status: "اكتمل" }, { user: "s.ali", action: "تحديث سياسة الخصوصية", status: "تمت المراجعة" }, { user: "a.fahad", action: "إغلاق تنبيه عالي الخطورة", status: "تم الحل" }];
+        function renderAuditLog(isInitial = false) {
+            const logEl = document.getElementById('audit-log');
+            if(!logEl) return;
+            if (isInitial) {
+                auditLogData.length = 0;
+                for(let i=0; i<5; i++) {
+                    const randomLog = auditSamples[Math.floor(Math.random() * auditSamples.length)];
+                    auditLogData.push({...randomLog, time: `${Math.ceil(Math.random()*50)}د`});
+                }
+            }
+            logEl.innerHTML = auditLogData.map(item => `
+                <li class="flex justify-between items-center text-sm border-b border-white/10 pb-2">
+                    <div><p class="font-semibold text-white">${item.action}</p><p class="text-xs text-slate-400">بواسطة: ${item.user}</p></div>
+                    <div class="text-right"><p class="font-mono text-xs text-slate-300">${item.time}</p><p class="font-bold text-xs ${item.status === 'تم الحل' ? 'text-green-400' : 'text-blue-300'}">${item.status}</p></div>
+                </li>`).join('');
+        }
+
+        const riskMatrix = [
+            { name: "خصوصية البيانات", severity: 3, likelihood: 2, status: "مسيطر عليه" }, { name: "أمن الشبكات", severity: 3, likelihood: 4, status: "يتطلب مراجعة" },
+            { name: "استمرارية الأعمال", severity: 2, likelihood: 2, status: "مسيطر عليه" }, { name: "الاحتيال المالي", severity: 1, likelihood: 5, status: "خطر عالي" },
+        ];
+        function renderHeatmap() {
+            const heatmapGrid = document.querySelector('.heatmap-grid');
+            if(!heatmapGrid) return;
+            heatmapGrid.innerHTML = '';
+            const severityLevels = 3; 
+            const likelihoodLevels = 5;
+            for (let s = severityLevels; s >= 1; s--) {
+                for (let l = 1; l <= likelihoodLevels; l++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'heatmap-cell';
+                    const riskValue = s * l;
+                    let bgColor = 'bg-green-500/30';
+                    if (riskValue > 4) bgColor = 'bg-yellow-500/30';
+                    if (riskValue > 9) bgColor = 'bg-red-500/30';
+                    cell.classList.add(bgColor);
+                    
+                    const risk = riskMatrix.find(r => r.severity === s && r.likelihood === l);
+                    if (risk) {
+                        const dot = document.createElement('div');
+                        dot.className = 'risk-dot';
+                        cell.appendChild(dot);
+                        const tooltip = document.createElement('span');
+                        tooltip.className = 'tooltip';
+                        tooltip.innerHTML = `<span class="font-bold">${risk.name}</span><br><span class="text-xs">${risk.status}</span>`;
+                        cell.appendChild(tooltip);
+                    }
+                    heatmapGrid.appendChild(cell);
+                }
+            }
+        }
+
+        function updateDashboardData() {
+            ['kpi-compliance', 'kpi-risks', 'kpi-alerts', 'kpi-policies'].forEach(id => {
+                const el = document.getElementById(id); if(!el) return;
+                const isPercent = el.textContent.includes('%');
+                let val = parseFloat(el.textContent);
+                val += (Math.random() - 0.45) * (isPercent ? 0.2 : 2);
+                val = Math.max(0, val);
+                el.textContent = isPercent ? `${val.toFixed(1)}%` : Math.round(val);
+                el.classList.remove('flash-update', 'flash-update-red');
+                void el.offsetWidth;
+                el.classList.add(Math.random() > 0.5 ? 'flash-update' : 'flash-update-red');
+            });
+            const timelineData = charts.timeline.data.datasets[0].data;
+            const lastValue = timelineData[timelineData.length - 1];
+            const newValue = Math.min(100, Math.max(80, lastValue + (Math.random() * 0.4 - 0.2)));
+            timelineData.push(newValue); timelineData.shift();
+            charts.timeline.data.labels.push(new Date().toLocaleString('ar', {month: 'long'}));
+            charts.timeline.data.labels.shift();
+            charts.timeline.update();
+            auditLogData.unshift({...auditSamples[Math.floor(Math.random() * auditSamples.length)], time: "الآن"});
+            if(auditLogData.length > 5) auditLogData.pop();
+            renderAuditLog();
+        }
+    });
+</script>
+</body>
+</html>
+
+
+
